@@ -29,10 +29,10 @@ fortranobject_dep = declare_dependency(
 
 
 ace_module = custom_target(
-    'acemodule',
-    output : 'acemodule.c',
+    'mdacemodule',
+    output : ['mdacemodule.c', 'mdace-f2pywrappers2.f90'],
     input : '../ace_sources/ace.pyf',
-    command: [py3, '-m', 'numpy.f2py', '@INPUT@', '--build-dir', '@OUTDIR@']
+    command: [py3, '-m', 'numpy.f2py', '@INPUT@', '--build-dir', '@OUTDIR@', '--lower']
 )
 
 
@@ -44,7 +44,8 @@ py3.extension_module('mdace',
   '../ace_sources/Md_numerical_recipes.f90', 
   '../ace_sources/Md_Utilitaires.f90', 
   '../ace_sources/Md_ACE.f90', 
-  ace_module],
+  ace_module
+  ],
   c_args: numpy_nodepr_api,
   dependencies: fortranobject_dep,
   install : true,
@@ -53,5 +54,14 @@ py3.extension_module('mdace',
 )
 
 py3.install_sources(
-    ['__init__.py', 'ace.py']
+    ['__init__.py', 'ace.py'],
+    pure: false,
+    subdir: 'python_ace'
 )
+
+py3.install_sources(
+    ['../ace_data/Data/NASA.therm', '../ace_data/Data/composes.dat'],
+    pure: false,
+    subdir: 'python_ace/data'
+)
+

@@ -14,4 +14,4 @@ dependencies = [
     "numpy>=1.20.0",
     "astropy",
 ]
-dynamic = ["version"]
+version="1.0.0"

@@ -1,4 +1,4 @@
-from .mdace import ace as acef
+from .mdace import md_ace as acef
 
 import numpy as np
 import math
@@ -15,8 +15,8 @@ def run_ace(
 ) -> np.ndarray:
     """Run Ace"""
 
-    specfile = pkg_resources.resource_filename('python_ace','external/Data/composes.dat')
-    thermfile = pkg_resources.resource_filename('python_ace','external/Data/NASA.therm')
+    specfile = pkg_resources.resource_filename('python_ace','data/composes.dat')
+    thermfile = pkg_resources.resource_filename('python_ace','data/NASA.therm')
 
 
     with open(specfile,'r') as f:
@@ -24,9 +24,9 @@ def run_ace(
     with open(specfile,'r') as f:
         molar_masses = np.array([float(l.split()[2].strip()) for l in f]) << u.u
 
-    mix_profile = acef(len(species),specfile,
+    mix_profile = acef.ace(len(species),specfile,
                                  thermfile,
-                                 np.zeros_like(pressure),
+                                 np.zeros_like(pressure.value),
                                  pressure.to(u.bar).value,
                                  temperature.to(u.K).value,
                                  He_solar,

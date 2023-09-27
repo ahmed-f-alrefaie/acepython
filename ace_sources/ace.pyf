@@ -1,7 +1,7 @@
 !    -*- f90 -*-
 ! Note: the context of this file is case sensitive.
 
-python module ace ! in 
+python module mdace ! in 
     interface  ! in :ace
         module md_ace ! in :ace:src/ACE/Md_ACE.f90
             subroutine ace(nspec, specfile,thermfile,nlayers,a_apt,p_apt,t_apt,he_abund_dex,c_abund_dex,o_abund_dex,n_abund_dex,fm) ! in :ace:src/ACE/Md_ACE.f90:md_ace
