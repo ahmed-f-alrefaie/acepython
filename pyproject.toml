@@ -8,10 +8,13 @@ requires = [
 ]
 
 [project]
-name = "python-ace"
-description = "Powell's Derivative-Free Optimization solvers"
+name = "acepython"
+description = "PACE"
 dependencies = [
     "numpy>=1.20.0",
-    "astropy",
+    "astropy>=5.0.0",
 ]
 version="1.0.0"
+
+[project.entry-points."taurex.plugins"]
+ace = acepython:ACEPlugin

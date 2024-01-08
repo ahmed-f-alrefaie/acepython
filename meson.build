@@ -1,5 +1,5 @@
 project(
-  'PythonACE',
+  'ACEPython',
   'c',
   version: '1.12.0.dev0',
   license: 'BSD-3',
@@ -110,4 +110,4 @@ if not cc.links('', name: '-Wl,--version-script', args: ['-shared', version_link
   version_link_args = []
 endif
 
-subdir('python-ace')
+subdir('acepython')

@@ -50,18 +50,18 @@ py3.extension_module('mdace',
   dependencies: fortranobject_dep,
   install : true,
   link_language: 'fortran',
-  subdir: 'python_ace',
+  subdir: 'acepython',
 )
 
 py3.install_sources(
     ['__init__.py', 'ace.py'],
     pure: false,
-    subdir: 'python_ace'
+    subdir: 'acepython'
 )
 
 py3.install_sources(
     ['../ace_data/Data/NASA.therm', '../ace_data/Data/composes.dat'],
     pure: false,
-    subdir: 'python_ace/data'
+    subdir: 'acepython/data'
 )
 

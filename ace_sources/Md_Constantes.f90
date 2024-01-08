@@ -199,6 +199,9 @@ Real(8), parameter :: atomic_weight(nmaxelem) = (/1.00794d0, &    ! H  Z=1
                                                  210.d0, &	   ! At Z=85
                                                  222.d0/)	   ! At Z=86
 
+! Function to find atomic weight for given element
+
+
 ! ---------------------------------------------------------------------------------------------
 ! Abondances solaires (Lodders 2010)
 ! ---------------------------------------------------------------------------------------------
@@ -206,6 +209,18 @@ Real(8), parameter :: H_abund_dex = 12.0d0
 Real(8), parameter :: O_abund_Sol_dex = 8.73d0
 Real(8), parameter :: C_abund_Sol_dex = 8.39d0 
 
+Contains
 
+Integer function find_atomic_index(elem)
+  Character(len=2), intent(in) :: elem
+  Integer :: i
+  do i=1,nmaxelem
+    if (trim(elem)==trim(element(i))) then
+      find_atomic_index = i
+      return
+    end if
+  end do
+  write(*,*) 'Element ',elem,' not found'
+end function find_atomic_index
 
 End Module Md_Constantes
