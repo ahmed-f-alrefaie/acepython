@@ -1,6 +1,6 @@
 # ACEPython - An equilibrium chemistry code
 
-<p align="center"><b><a href="#introduction">Introduction</a> | <a href="#usage">Usage</a> | <a href="#taurex3">TauREx 3</a> | <a href="#citing-pdfo">Citing ACEPython</a>
+<p align="center"><b><a href="#introduction">Introduction</a> | <a href="#usage">Usage</a> | <a href="#taurex3">TauREx 3</a> | <a href="#citing-pdfo">Citing ACEPython</a></b></p>
 
 
 ## Introduction
