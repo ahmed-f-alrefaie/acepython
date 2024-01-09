@@ -1,4 +1,4 @@
-# ACEPython - A equilibrium chemistry code
+# ACEPython - An equilibrium chemistry code
 
 <p align="center"><b><a href="#introduction">Introduction</a> | <a href="#python-version-of-pdfo">Usage</a> | <a href="#citing-pdfo">Citing ACEPython</a> | <a href="#acknowledgments">Acknowledgments</a></b></p>
 
@@ -18,7 +18,7 @@ pip install acepython
 Or, if you prefer, you can build it from source which requires a FORTRAN and C compiler. The following commands will build and install ACEPython:
 
 ```bash
-git clone https://blah
+git clone https://github.com/ucl-exoplanets/acepython.git
 cd acepython
 pip install .
 ```
@@ -64,6 +64,10 @@ ax2.invert_yaxis()
 ax2.set_ylabel("Pressure (bar)")
 ax2.set_xlabel("Mean molecular weight (au)")
 
-plt.show
+plt.show()
+```
+
+Should produce the following figure:
+![alt text](https://github.com/ucl-exoplanets/acepython/blob/main/examples/ace_example.svg?raw=true)
 
 
