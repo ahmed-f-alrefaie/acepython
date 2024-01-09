@@ -10,20 +10,6 @@ pressure = np.logspace(6, -2, 100) << u.bar
 species, mix_profile, mu_profile = run_ace(
     temperature,
     pressure,
-    elements=[
-        "C",
-        "O",
-        "N",
-        "H",
-        "He",
-    ],
-    abundances=[
-        8.39,
-        8.73,
-        7.86,
-        12,
-        10.93,
-    ],
 )
 
 species_to_see = ["H2", "H20", "CH4", "NH3", "C2H2", "CO", "CO2", "H2CO"]
@@ -48,4 +34,4 @@ ax2.invert_yaxis()
 ax2.set_ylabel("Pressure (bar)")
 ax2.set_xlabel("Mean molecular weight (au)")
 
-plt.show()
+plt.savefig("ace_example.svg")
