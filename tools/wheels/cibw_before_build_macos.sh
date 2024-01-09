@@ -5,7 +5,6 @@ PLATFORM=$(PYTHONPATH=tools python -c "import openblas_support; print(openblas_s
 echo $PLATFORM
 
 # Update license
-cat $PROJECT_DIR/tools/wheels/LICENSE_osx.txt >> $PROJECT_DIR/LICENSE.txt
 
 #########################################################################################
 # Install GFortran + OpenBLAS

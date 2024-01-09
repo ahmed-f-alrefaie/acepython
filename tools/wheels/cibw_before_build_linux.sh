@@ -17,7 +17,6 @@ PLATFORM=$(PYTHONPATH=tools python -c "import openblas_support; print(openblas_s
 
 printenv
 # Update license
-cat $PROJECT_DIR/tools/wheels/LICENSE_linux.txt >> $PROJECT_DIR/LICENSE.txt
 
 # Install Openblas
 basedir=$(python tools/openblas_support.py $NIGHTLY_FLAG)
