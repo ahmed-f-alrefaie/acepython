@@ -1,7 +1,6 @@
 from .mdace import md_ace as acef
 
 import numpy as np
-import math
 import pkg_resources
 from astropy import units as u
 import typing as t
@@ -30,16 +29,14 @@ def run_ace(
     """
 
     specfile = specfile or pkg_resources.resource_filename(
-        "python_ace", "data/composes.dat"
+        "acepython", "data/composes.dat"
     )
     thermfile = thermfile or pkg_resources.resource_filename(
-        "python_ace", "data/NASA.therm"
+        "acepython", "data/NASA.therm"
     )
 
     with open(specfile, "r") as f:
-        species = [
-            s.split()[1].strip() for s in f
-        ]
+        species = [s.split()[1].strip() for s in f]
     with open(specfile, "r") as f:
         molar_masses = np.array([float(l.split()[2].strip()) for l in f]) << u.u
 
@@ -56,7 +53,7 @@ def run_ace(
         pressure.to(u.bar).value,
         temperature.to(u.K).value,
         element_array.T,
-        abundances,
+        np.array(abundances),
     )
 
     mu_profile = (mix_profile * molar_masses[:, None]).sum(axis=0)

@@ -9,7 +9,7 @@ requires = [
 
 [project]
 name = "acepython"
-description = "PACE"
+description = "Python wrapper for the FORTRAN ACE code."
 dependencies = [
     "numpy>=1.20.0",
     "astropy>=5.0.0",
@@ -17,4 +17,4 @@ dependencies = [
 version="1.0.0"
 
 [project.entry-points."taurex.plugins"]
-ace = acepython:ACEPlugin
+acepython = "acepython.taurex3"

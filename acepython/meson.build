@@ -54,7 +54,7 @@ py3.extension_module('mdace',
 )
 
 py3.install_sources(
-    ['__init__.py', 'ace.py'],
+    ['__init__.py', 'ace.py', 'taurex3.py'],
     pure: false,
     subdir: 'acepython'
 )
