@@ -7,7 +7,7 @@ printenv
 # Update license
 
 # Install Openblas
-PYTHONPATH=tools python -c "import openblas_support; openblas_support.make_init('scipy')"
+PYTHONPATH=tools python -c "import openblas_support; openblas_support.make_init('acepython')"
 mkdir -p /c/opt/32/lib/pkgconfig
 mkdir -p /c/opt/64/lib/pkgconfig
 
