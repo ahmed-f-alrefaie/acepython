@@ -215,11 +215,13 @@ Integer function find_atomic_index(elem)
   Character(len=2), intent(in) :: elem
   Integer :: i
   do i=1,nmaxelem
+    
     if (trim(elem)==trim(element(i))) then
       find_atomic_index = i
       return
     end if
   end do
+  find_atomic_index = -1
   write(*,*) 'Element ',elem,' not found'
 end function find_atomic_index
 

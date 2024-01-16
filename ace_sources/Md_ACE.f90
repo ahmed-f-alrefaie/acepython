@@ -24,7 +24,7 @@ Contains
 !######################################################################
 
    Subroutine ACE(nspec, specfile,thermfile,nlayers,a_apt,p_apt,t_apt, &
-     nelem,elem, abund_dex, fm)
+     nelem,elem, abund_dex, fm, error_code)
 
 !Subroutine ACE(a_apt,p_apt,t_apt,He_abund_dex,C_abund_dex,O_abund_dex,N_abund_dex, &
 !               nspec,fm,code)  bind(c, name='ACE')
@@ -39,6 +39,7 @@ Contains
 
       Real(8),         intent(in)    :: abund_dex(nelem)
       Real(8),         intent(out)   :: fm(nspec,nlayers)
+      Integer,         intent(out)   :: error_code
 !Integer,          intent(in)    :: nspec
 !Real(8),         intent(out)   :: fm(nspec,size(a_apt))
 !Integer,          intent(inout) :: code
@@ -85,16 +86,24 @@ Contains
       Integer  :: i, j, u
       Character(len=100) :: line
 
-
-      If (nelem > nmaxelem) Call Message_exec('E- Number of elements too high','stop')
+      error_code = 0
+      If (nelem > nmaxelem) then
+         error_code = 1
+         return
+      End if
 
       elfab(:) = abund_dex(:)
 
       do i = 1, nelem
          ilenelem(i) = len(trim(elem(i)))
       end do
+
       do i = 1, nelem
          zat(i) = find_atomic_index(elem(i))
+         if (zat(i) == -1) then
+            error_code = 15
+            return
+         end if
       end do
 
       do i = 1, nelem
@@ -126,8 +135,10 @@ Contains
       idzat(:,:)  = 0
 
       Call read_therm(thermfile,spec,ilenspec,elem,ilenelem,zat,charge,nattot,nat,idzat,idtherm,atherm,btherm, &
-         tkmin_therm,tkmax_therm,tkmid_therm,ion,id_electr)
-
+         tkmin_therm,tkmax_therm,tkmid_therm,ion,id_electr, error_code)
+         if (error_code /= 0) then
+            return
+         End If
 
 ! Compute chemical equilibrium
 
@@ -167,7 +178,7 @@ Contains
 !######################################################################
 
    Subroutine read_therm(thermfile,spec,ilenspec,elem,ilenelem,zat,charge,nattot,nat,idzat,idtherm, &
-      atherm,btherm,tkmin_therm,tkmax_therm,tkmid_therm,ion,id_electr)
+      atherm,btherm,tkmin_therm,tkmax_therm,tkmid_therm,ion,id_electr, error_code)
 
       Implicit None
       Character(len=*), intent(in)  :: thermfile
@@ -188,6 +199,7 @@ Contains
       Real(8),         intent(out) :: tkmid_therm(:)       ! medium temperature for use of a or b therm coefficients
       Logical,          intent(out) :: ion                  ! .true.(.false.) = there are (not) charged species
       Integer,          intent(out) :: id_electr            ! species identifier for electron
+      Integer,          intent(out) :: error_code
       Character(len=nmaxcharspec) :: read_spec, cwk1, cwk2
       Character(len=256) :: line
       Character(len=2)   :: read_txt(2*nmaxelemxs), read_elem(nmaxelemxs)
@@ -202,7 +214,7 @@ Contains
       Integer  :: i, j, k, l, m, u
       Integer  :: end_of_file ! < 0 si c'est la fin du fichier
 
-
+      error_code = 0
       nspec = size(spec)
       nelem = size(ilenelem)
 
@@ -233,7 +245,9 @@ Contains
             Read(u,*), (read_b(j),j=1,nb_NASA_coef)
          Else
             Write(*,*) ' E- unknown therm data type for: ',read_spec
-            Stop
+            error_code = 2
+            close(u)
+            return
          End if
 
          i = nmaxcharspec		   ! verify whether species is included or not
@@ -259,7 +273,9 @@ Contains
                nattot(i) = read_nattot
                If(read_nelem > nmaxelemxs-1)then
                   Write(*,*)' E- Many elements in: ',spec(i)
-                  stop
+                  error_code = 3
+                  close(u)
+                  return
                End if
                Do j = 1, read_nelem
                   fnd_read_elem = .false.
@@ -288,7 +304,9 @@ Contains
                   End do
                   If(.not.(fnd_read_elem))then
                      Write(*,*)' E- Error on elements for: ',spec(i)
-                     stop
+                     error_code = 4
+                     close(u)
+                     return
                   End if
                End do
                charge(i)  = read_charge
@@ -331,12 +349,14 @@ Contains
 ! verify that all species have thermo data
       If(ntherm /= nspec) then
          Write(*,*)' E- Error searching for thermo data', ntherm, nspec
-         Stop
+         error_code = 8
+         return
       End if
       Do i = 1, nspec
          If(nattot(i) == 0) then
             Write(*,*)' E- Number of atoms zero for: ',spec(i)
-            Stop
+            error_code = 5
+            return
          End if
       End do
 
@@ -348,7 +368,8 @@ Contains
          End do
          If(k /= nattot(i)) then
             Write(*,*)' E- Wrong number of atoms for: ',spec(i),k,nattot(i)
-            Stop
+            error_code = 6
+            return
          End if
       End do
 
@@ -360,7 +381,8 @@ Contains
             If(il /= k) Cycle
             If(spec(i)(1:il) == spec(j)(1:il)) then
                Write(*,*)' E- Twice species ',spec(i)(1:il)
-               Stop
+               error_code = 7
+               return
             End if
          End do
       End do
@@ -376,7 +398,8 @@ Contains
       End do
       If (ion .and. ((j == 0) .or. (k == 0))) then
          Write(*,*)' E- Missing (+/-) charged species'
-         Stop
+         error_code = 9
+         return
       End if
 
 ! identify electron species if present

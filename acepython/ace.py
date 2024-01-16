@@ -6,6 +6,24 @@ from astropy import units as u
 import typing as t
 
 
+class AceError(Exception):
+    def __init__(self, error_code: int):
+        codes = {
+            1: "Number of elements too high",
+            2: "Unknown therm data type",
+            3: "Many elements in species",
+            4: "Error on elements.",
+            8: "Error searching for thermo data",
+            5: "Number of atoms zero in species",
+            6: "Wrong number of atoms in species",
+            7: "Species duplicated.",
+            8: "Missing (+/-) charged species",
+            15: "Element not found in element list",
+        }
+
+        super().__init__(codes.get(error_code, "Unknown error"))
+
+
 def run_ace(
     temperature: u.Quantity,
     pressure: u.Quantity,
@@ -42,19 +60,21 @@ def run_ace(
 
     # Pad elements to 2 characters
     elements = [e.ljust(2) for e in elements]
-    element_array = np.empty((len(elements), 2), dtype="c")
+    element_array = np.empty(len(elements), dtype="S2")
     for i, element in enumerate(elements):
         element_array[i] = element
-    mix_profile = acef.ace(
+    mix_profile, error_code = acef.ace(
         len(species),
         specfile,
         thermfile,
         np.zeros_like(pressure.value),
         pressure.to(u.bar).value,
         temperature.to(u.K).value,
-        element_array.T,
+        element_array,
         np.array(abundances),
     )
+    if error_code != 0:
+        raise AceError(error_code)
 
     mu_profile = (mix_profile * molar_masses[:, None]).sum(axis=0)
 
