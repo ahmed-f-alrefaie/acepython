@@ -1,9 +1,9 @@
 from .mdace import md_ace as acef
 
 import numpy as np
-import pkg_resources
 from astropy import units as u
 import typing as t
+import importlib.resources as ires
 
 
 class AceError(Exception):
@@ -17,7 +17,7 @@ class AceError(Exception):
             5: "Number of atoms zero in species",
             6: "Wrong number of atoms in species",
             7: "Species duplicated.",
-            8: "Missing (+/-) charged species",
+            9: "Missing (+/-) charged species",
             15: "Element not found in element list",
         }
 
@@ -46,12 +46,8 @@ def run_ace(
 
     """
 
-    specfile = specfile or pkg_resources.resource_filename(
-        "acepython", "data/composes.dat"
-    )
-    thermfile = thermfile or pkg_resources.resource_filename(
-        "acepython", "data/NASA.therm"
-    )
+    specfile = specfile or ires.files("acepython") / "data" / "composes.dat"
+    thermfile = thermfile or ires.files("acepython") / "data" / "NASA.therm"
 
     with open(specfile, "r") as f:
         species = [s.split()[1].strip() for s in f]
@@ -65,8 +61,8 @@ def run_ace(
         element_array[i] = element
     mix_profile, error_code = acef.ace(
         len(species),
-        specfile,
-        thermfile,
+        str(specfile),
+        str(thermfile),
         np.zeros_like(pressure.value),
         pressure.to(u.bar).value,
         temperature.to(u.K).value,
@@ -75,6 +71,9 @@ def run_ace(
     )
     if error_code != 0:
         raise AceError(error_code)
+
+    # Normalize the mixing ratios
+    mix_profile = mix_profile / mix_profile.sum(axis=0, keepdims=True)
 
     mu_profile = (mix_profile * molar_masses[:, None]).sum(axis=0)
 

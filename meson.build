@@ -110,4 +110,4 @@ if not cc.links('', name: '-Wl,--version-script', args: ['-shared', version_link
   version_link_args = []
 endif
 
-subdir('acepython')
+subdir('src/acepython')
