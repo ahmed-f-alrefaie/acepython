@@ -10,13 +10,6 @@ echo $PLATFORM
 # Install GFortran + OpenBLAS
 
 if [[ $PLATFORM == "macosx-x86_64" ]]; then
-  # Openblas
-  basedir=$(python tools/openblas_support.py)
-
-  # copy over the OpenBLAS library stuff first
-  cp -r $basedir/lib/* /usr/local/lib
-  cp $basedir/include/* /usr/local/include
-
   #GFORTRAN=$(type -p gfortran-9)
   #sudo ln -s $GFORTRAN /usr/local/bin/gfortran
   # same version of gfortran as the openblas-libs and scipy-wheel builds
@@ -49,19 +42,6 @@ if [[ $PLATFORM == "macosx-x86_64" ]]; then
 fi
 
 if [[ $PLATFORM == "macosx-arm64" ]]; then
-  # OpenBLAS
-  # need a version of OpenBLAS that is suited for gcc >= 11
-  basedir=$(python tools/openblas_support.py)
-
-  # use /opt/arm64-builds as a prefix, because that's what the multibuild
-  # OpenBLAS pkgconfig files state
-  sudo mkdir -p /opt/arm64-builds/lib
-  sudo mkdir -p /opt/arm64-builds/include
-  sudo cp -r $basedir/lib/* /opt/arm64-builds/lib
-  sudo cp $basedir/include/* /opt/arm64-builds/include
-
-  # we want to force a dynamic linking
-  sudo rm /opt/arm64-builds/lib/*.a
 
   curl -L https://github.com/fxcoudert/gfortran-for-macOS/releases/download/12.1-monterey/gfortran-ARM-12.1-Monterey.dmg -o gfortran.dmg
   GFORTRAN_SHA256=$(shasum -a 256 gfortran.dmg)
