@@ -5,6 +5,19 @@ build_and_store_wheels: &BUILD_AND_STORE_WHEELS
     - cibuildwheel
   wheels_artifacts:
     path: "wheelhouse/*"
+  publish_task:
+    name: publish (Linux - 3.10)
+    container: {image: "python:3.10-bullseye"}
+    depends_on: [build_and_store_wheels,install_cibuildwheel_script, cibuildwheel_script, wheels_artifacts]
+    only_if: $CIRRUS_TAG =~ 'v\d.*'
+    env:
+      TWINE_REPOSITORY: pypi
+      TWINE_USERNAME: __token__
+      TWINE_PASSWORD: ENCRYPTED[737b9fd994f87702c0c4cfe32f5b839ab4cbd719f62dbb7725aec0a6ffb070d1054a013374f2d3901cba30ccf336fc60]
+    publish_script:
+      - ls dist/*
+      - python -m twine upload dist/*
+
 
 cirrus_wheels_macos_arm64_task:
   macos_instance:
