@@ -6,6 +6,7 @@ set -x
 python -m venv venv
 source venv/bin/activate
 python -m pip install --progress-bar=off dist/*.tar.gz
-python -m unittest pdfo.testpdfo
+pip install pytest
+pytest tests/
 deactivate
 rm -r venv
