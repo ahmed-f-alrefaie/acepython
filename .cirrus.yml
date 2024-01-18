@@ -60,6 +60,8 @@ publish_task:
     TWINE_PASSWORD: ENCRYPTED[737b9fd994f87702c0c4cfe32f5b839ab4cbd719f62dbb7725aec0a6ffb070d1054a013374f2d3901cba30ccf336fc60]
   publish_script: |
     echo "Publishing wheels..."
+    curl https://api.cirrus-ci.com/v1/artifact/build/$CIRRUS_BUILD_ID/wheels.zip --output wheels.zip
+    unzip wheels.zip
     ls -l
     echo "CIRRUS_RELEASE: $CIRRUS_RELEASE"
     echo "CIRRUS_REPO_FULL_NAME: $CIRRUS_REPO_FULL_NAME"
