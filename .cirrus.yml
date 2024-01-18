@@ -53,12 +53,9 @@ publish_task:
   name: publish (Linux - 3.10)
   container: {image: "python:3.10-bullseye"}
   depends_on: [cirrus_wheels_macos_arm64_task]
-  only_if: $CIRRUS_TAG =~ 'v\d.*'
   env:
+    GITHUB_TOKEN: ENCRYPTED[!7402ef8e4fad6fc90238717d2f9069b896e0bf13906b7d8057ccbfa27ec4badce78765bcae2f02e3d08f061589ccb895!]
     TWINE_REPOSITORY: pypi
     TWINE_USERNAME: __token__
     TWINE_PASSWORD: ENCRYPTED[737b9fd994f87702c0c4cfe32f5b839ab4cbd719f62dbb7725aec0a6ffb070d1054a013374f2d3901cba30ccf336fc60]
-  publish_script:
-    - cp wheelhouse/* dist/
-    - ls dist/*
-    - python -m twine upload dist/*
+  publish_script: tools/wheels/publish_cirrus.sh
