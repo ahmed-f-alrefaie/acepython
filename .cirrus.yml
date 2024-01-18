@@ -59,5 +59,4 @@ publish_task:
     TWINE_USERNAME: __token__
     TWINE_PASSWORD: ENCRYPTED[737b9fd994f87702c0c4cfe32f5b839ab4cbd719f62dbb7725aec0a6ffb070d1054a013374f2d3901cba30ccf336fc60]
   publish_script: 
-    - chmod +x {project}/tools/wheels/publish_cirrus.sh
-    - {project}/wheels/publish_cirrus.sh
+    chmod +x {project}/tools/wheels/publish_cirrus.sh && bash {project}/wheels/publish_cirrus.sh
