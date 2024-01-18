@@ -29,8 +29,7 @@ jobs:
         # - [macos-11, macosx, x86_64]
         # - [windows-2019, win, AMD64]
 
-        #python: [["cp39", "3.9"], ["cp310", "3.10"], ["cp311", "3.11"], ["cp312", "3.12"]]
-        python: [["cp39", "3.9"]]
+        python: [["cp39", "3.9"], ["cp310", "3.10"], ["cp311", "3.11"], ["cp312", "3.12"]]
         # python[0] is used to specify the python versions made by cibuildwheel
 
     env:
@@ -155,6 +154,7 @@ jobs:
     environment: pypi
     permissions:
       id-token: write
+    if: github.event_name == 'release' && github.event.action == 'published'
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -163,7 +163,7 @@ jobs:
           path: dist/
           merge-multiple: true
 
-      # - uses: pypa/gh-action-pypi-publish@release/v1
-      #   with:
-      #     user: __token__
-      #     password: ${{ secrets.pypi_apikey }}
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.pypi_apikey }}
