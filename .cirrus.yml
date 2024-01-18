@@ -81,7 +81,7 @@ publish_task:
     mkdir dist
     cp wheelhouse/* dist/
 
-    python -m twine upload dist/
+    python -m twine upload dist/*
 
 
     file_content_type="application/octet-stream"
