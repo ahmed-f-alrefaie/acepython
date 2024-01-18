@@ -25,9 +25,9 @@ jobs:
         # [windows-2019, win*, "AMD64 x86"]. However, those two require a different compiler setup
         # so easier to separate out here.
         - [ubuntu-22.04, manylinux, x86_64]
-        # - [ubuntu-22.04, musllinux, x86_64]
-        # - [macos-11, macosx, x86_64]
-        # - [windows-2019, win, AMD64]
+        - [ubuntu-22.04, musllinux, x86_64]
+        - [macos-11, macosx, x86_64]
+        - [windows-2019, win, AMD64]
 
         python: [["cp39", "3.9"], ["cp310", "3.10"], ["cp311", "3.11"], ["cp312", "3.12"]]
         # python[0] is used to specify the python versions made by cibuildwheel
@@ -152,6 +152,25 @@ jobs:
     needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
     environment: pypi
+    permissions:
+      id-token: write
+    if: github.event_name == 'release' && github.event.action == 'published'
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          # unpacks all CIBW artifacts into dist/
+          pattern: cibw-*
+          path: dist/
+          merge-multiple: true
+
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.pypi_apikey }}
+    
+  upload_release:
+    needs: [build_wheels, build_sdist]
+    runs-on: ubuntu-latest
     permissions:
       id-token: write
     if: github.event_name == 'release' && github.event.action == 'published'

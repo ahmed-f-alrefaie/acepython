@@ -20,6 +20,9 @@ fi
 mkdir dist
 cp wheelhouse/* dist/
 
+python -m twine upload dist/
+
+
 file_content_type="application/octet-stream"
 
 
@@ -37,4 +40,3 @@ done
 
 # Publish wheels to PyPI
 
-python -m twine upload dist/
