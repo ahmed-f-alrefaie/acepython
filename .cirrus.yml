@@ -77,7 +77,7 @@ publish_task:
       echo "Please provide GitHub access token via GITHUB_TOKEN environment variable!"
       exit 1
     fi
-
+    pip install twine
     mkdir dist
     cp wheelhouse/* dist/
 
