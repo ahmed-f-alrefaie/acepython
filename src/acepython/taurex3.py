@@ -6,11 +6,12 @@ except ImportError:
     AutoChemistry = object  # Make it a dummy class
 
 import numpy as np
-import pkg_resources
+import importlib.metadata as meta
 import math
 from astropy import units as u
 from .ace import run_ace
 from taurex.core import fitparam
+import pathlib
 
 
 class ACEChemistry(AutoChemistry):
@@ -56,9 +57,8 @@ class ACEChemistry(AutoChemistry):
         self._abundances = abundances
         self._metallicity = metallicity
         self.he_h_ratio = he_h_ratio
-        self.specfile = specfile or pkg_resources.resource_filename(
-            "acepython", "data/composes.dat"
-        )
+        self.spec_file = specfile
+
         self.thermfile = thermfile
 
         self.ratio_element = ratio_element
