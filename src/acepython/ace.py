@@ -4,6 +4,7 @@ import numpy as np
 from astropy import units as u
 import typing as t
 import importlib.resources as ires
+import numpy.typing as npt
 
 
 class AceError(Exception):
@@ -31,7 +32,7 @@ def run_ace(
     abundances: t.Optional[t.List[float]] = [12, 10.93, 8.39, 7.86, 8.73],
     specfile: t.Optional[str] = None,
     thermfile: t.Optional[str] = None,
-) -> np.ndarray:
+) -> t.Tuple[t.List[str], npt.NDArray[np.float64], npt.NDArray[np.float64]]:
     """Runs ACE on a given temperature and pressure profile.
 
     Args:
@@ -43,6 +44,9 @@ def run_ace(
         N_solar: Solar nitrogen abundance in dex, default is 7.86.
         specfile: Path to the ACE specfile.
         thermfile: Path to the ACE thermfile.
+
+    Returns:
+        Tuple of species, mixing ratios and mean molecular weight.
 
     """
 
