@@ -40,7 +40,7 @@ cirrus_wheels_macos_arm64_task:
     - ln -s /opt/homebrew/opt/python@3.10/bin/python /opt/homebrew/opt/python@3.10/bin/python
 
   build_script:
-    - which /opt/homebrew/opt/python@3.10/bin/python
+    # - which /opt/homebrew/opt/python@3.10/bin/python
     # needed for submodules
     - git submodule update --init
     - uname -m
