@@ -1,6 +1,6 @@
 build_and_store_wheels: &BUILD_AND_STORE_WHEELS
   install_cibuildwheel_script:
-    - python -m pip install cibuildwheel==2.15.0
+    - python3 -m pip install cibuildwheel==2.15.0
   cibuildwheel_script:
     - cibuildwheel
   wheels_artifacts:
@@ -24,7 +24,7 @@ cirrus_wheels_macos_arm64_task:
       PIP_NO_BUILD_ISOLATION=false
     # TODO remove the following line once there are numpy2.0 wheels available on PyPI.
     # Also remove PIP_NO_BUILD_ISOLATION, PIP_EXTRA_INDEX_URL flags.
-    CIBW_BEFORE_BUILD_MACOS: "pip install numpy>=2.0.0.dev0 meson-python ninja;bash {project}/tools/wheels/cibw_before_build_macos.sh {project}"
+    CIBW_BEFORE_BUILD_MACOS: "pip3 install numpy>=2.0.0.dev0 meson-python ninja;bash {project}/tools/wheels/cibw_before_build_macos.sh {project}"
     PKG_CONFIG_PATH: /opt/arm64-builds/lib/pkgconfig
     # assumes that the cmake config is in /usr/local/lib/cmake
     CMAKE_PREFIX_PATH: /opt/arm64-builds/
@@ -38,14 +38,13 @@ cirrus_wheels_macos_arm64_task:
   install_pre_requirements_script:
     - brew install python@3.10
     - ln -s python3 /opt/homebrew/opt/python@3.10/bin/python
-    - ln -s python /opt/homebrew/opt/python@3.10/bin/python
 
   build_script:
     - which python
     # needed for submodules
     - git submodule update --init
     - uname -m
-    - python -c "import platform;print(platform.python_version());print(platform.system());print(platform.machine())"
+    - python3 -c "import platform;print(platform.python_version());print(platform.system());print(platform.machine())"
     - clang --version
   <<: *BUILD_AND_STORE_WHEELS
 
@@ -82,7 +81,7 @@ publish_task:
     mkdir dist
     cp wheelhouse/* dist/
 
-    python -m twine upload dist/*
+    python3 -m twine upload dist/*
 
 
     file_content_type="application/octet-stream"
