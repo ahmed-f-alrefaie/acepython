@@ -57,7 +57,7 @@ class ACEChemistry(AutoChemistry):
         self._abundances = abundances
         self._metallicity = metallicity
         self.he_h_ratio = he_h_ratio
-        self.spec_file = specfile
+        self.specfile = specfile
 
         self.thermfile = thermfile
 
