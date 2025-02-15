@@ -12,6 +12,7 @@ from astropy import units as u
 from .ace import run_ace
 from taurex.core import fitparam
 import pathlib
+import importlib.resources as ires
 
 
 class ACEChemistry(AutoChemistry):
@@ -57,7 +58,7 @@ class ACEChemistry(AutoChemistry):
         self._abundances = abundances
         self._metallicity = metallicity
         self.he_h_ratio = he_h_ratio
-        self.spec_file = specfile
+        self.specfile = specfile or ires.files("acepython") / "data" / "composes.dat"
 
         self.thermfile = thermfile
 
