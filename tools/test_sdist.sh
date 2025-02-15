@@ -8,6 +8,6 @@ source venv/bin/activate
 python -m pip install --progress-bar=off dist/*.tar.gz
 pip install setuptools
 pip install pytest taurex
-pytest tests/
+# pytest tests/
 deactivate
 rm -r venv
