@@ -4,14 +4,14 @@ requires = [
     "meson-python>=0.12.1",
     "wheel",
     "oldest-supported-numpy",
-    "numpy>=1.25.0; python_version>='3.9'",
+    "numpy<2.0.0; python_version>='3.9'",
 ]
 
 [project]
 name = "acepython"
 description = "Python wrapper for the FORTRAN ACE code."
 dependencies = [
-    "numpy>=1.25.0",
+    "numpy<2.0.0",
     "astropy>=5.0.0",
 ]
 version="0.0.17"
