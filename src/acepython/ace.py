@@ -6,6 +6,11 @@ import typing as t
 import importlib.resources as ires
 import numpy.typing as npt
 
+DEFAULT_SPEC = ires.files("acepython") / "data" / "composes.dat"
+"""Default path to the ACE specfile."""
+DEFAULT_THERM = ires.files("acepython") / "data" / "NASA.therm"
+"""Default path to the ACE thermfile."""
+
 
 class AceError(Exception):
     def __init__(self, error_code: int):
@@ -50,8 +55,8 @@ def run_ace(
 
     """
 
-    specfile = specfile or ires.files("acepython") / "data" / "composes.dat"
-    thermfile = thermfile or ires.files("acepython") / "data" / "NASA.therm"
+    specfile = specfile or DEFAULT_SPEC
+    thermfile = thermfile or DEFAULT_THERM
 
     with open(specfile, "r") as f:
         species = [s.split()[1].strip() for s in f]

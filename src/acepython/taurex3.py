@@ -6,12 +6,10 @@ except ImportError:
     AutoChemistry = object  # Make it a dummy class
 
 import numpy as np
-import importlib.metadata as meta
 import math
 from astropy import units as u
-from .ace import run_ace
+from .ace import run_ace, DEFAULT_SPEC, DEFAULT_THERM
 from taurex.core import fitparam
-import pathlib
 import importlib.resources as ires
 
 
@@ -30,6 +28,7 @@ class ACEChemistry(AutoChemistry):
         thermfile: t.Optional[str] = None,
         ratio_element: t.Optional[str] = "O",
         metallicity: t.Optional[float] = 1.0,
+        **kwargs,
     ):
         """ACE Chemistry for TauREx3.
 
@@ -39,6 +38,8 @@ class ACEChemistry(AutoChemistry):
             specfile: Path to the ACE specfile. Defaults to inbuilt.
             thermfile: Path to the ACE thermfile. Defaults to inbuilt.
             ratio_element: Element to use for ratio. Defaults to 'O'.
+            metallicity: Metallicity of the atmosphere. Defaults to 1.0.
+            kwargs: ratio_values. e,g (C_ratio=0.5) for C/<ratio_element> ratio.
         """
         super().__init__(self.__class__.__name__)
 
@@ -58,9 +59,9 @@ class ACEChemistry(AutoChemistry):
         self._abundances = abundances
         self._metallicity = metallicity
         self.he_h_ratio = he_h_ratio
-        self.specfile = specfile or ires.files("acepython") / "data" / "composes.dat"
+        self.specfile = specfile or DEFAULT_SPEC
 
-        self.thermfile = thermfile
+        self.thermfile = thermfile or DEFAULT_THERM
 
         self.ratio_element = ratio_element
 
@@ -86,8 +87,13 @@ class ACEChemistry(AutoChemistry):
         self.species = self._species()
         self.determine_active_inactive()
         self.add_ratio_params()
+        for key, value in kwargs.items():
+            if key in self._ratio_setters:
+                self.info(f"Setting {key} to {value}")
+                self._ratio_setters[key](self, value)
 
     def add_ratio_params(self):
+        self._ratio_setters = {}
         for idx, element in enumerate(self.metal_elements):
             if element == self.ratio_element:
                 continue
@@ -108,6 +114,7 @@ class ACEChemistry(AutoChemistry):
             bounds = [1.0e-12, 0.1]
 
             default_fit = False
+            self._ratio_setters[f"{element}_ratio"] = fset
             self.add_fittable_param(
                 param_name, param_tex, fget, fset, "log", default_fit, bounds
             )
