@@ -1,7 +1,7 @@
 project(
   'ACEPython',
   'c',
-  version: '1.12.0.dev0',
+  version: '0.0.21',
   license: 'BSD-3',
   meson_version: '>= 1.1.0',
   default_options: [
