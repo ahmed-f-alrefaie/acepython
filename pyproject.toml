@@ -4,19 +4,19 @@ requires = [
     "meson-python>=0.12.1",
     "wheel",
     "oldest-supported-numpy",
-    "numpy<2.0.0; python_version>='3.9'",
+    "numpy>2.0.2; python_version>='3.10'",
 ]
 
 [project]
 name = "acepython"
 description = "Python wrapper for the FORTRAN ACE code."
 dependencies = [
-    "numpy<2.0.0",
-    "astropy>=5.0.0",
+    "numpy>=2.0.2",
+    "astropy>=6.0.0",
 ]
 version="0.0.19"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 authors = [
     {name = "Ahmed F. Al-Refaie", email = "ahmed.al-refaie.12@ucl.ac.uk"},
 ]
@@ -52,11 +52,10 @@ classifiers = [
     "Operating System :: Microsoft :: Windows",
     "Programming Language :: Fortran",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Scientific/Engineering",
     "Topic :: Software Development :: Libraries",
     "Topic :: Software Development :: Libraries :: Python Modules",
